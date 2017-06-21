@@ -1,0 +1,44 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'io.spring.gradle:propdeps-plugin:0.0.9.RELEASE'
+    }
+}
+
+apply plugin: 'kotlin2js'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-idea'
+
+dependencies {
+    compile project(':common-js')
+    provided project(':common')
+    compile "org.jetbrains.kotlin:kotlin-stdlib-js:$kotlin_version"
+}
+
+compileKotlin2Js {
+    kotlinOptions.outputFile = "${projectDir}/pages/web/salario.js"
+    kotlinOptions.moduleKind = "plain"
+    kotlinOptions.sourceMap = true
+    kotlinOptions.metaInfo = true
+}
+
+
+compileKotlin2Js.doLast {
+    configurations.compile.each { File file ->
+        copy {
+            includeEmptyDirs = false
+
+            from zipTree(file.absolutePath)
+            into "${projectDir}/pages/web"
+            include { fileTreeElement ->
+                def path = fileTreeElement.path
+                path.endsWith(".js") && (path.startsWith("META-INF/resources/") || !path.startsWith("META-INF/"))
+            }
+        }
+    }
+}

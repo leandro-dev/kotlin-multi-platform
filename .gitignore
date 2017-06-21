@@ -1,0 +1,10 @@
+/.gradle
+/local.properties
+/.idea
+/build
+/android/build
+/common/build
+/javascript/build
+/javascript/pages/web
+*.iml
+/android/src/main/gen
