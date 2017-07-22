@@ -1,5 +1,3 @@
 package a.b.c
 
-fun hi(): String {
-    return "Hi"
-}
+header fun hi(): String
